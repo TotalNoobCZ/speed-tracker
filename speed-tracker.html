@@ -52,6 +52,39 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        /* GPS Permission Section */
+        .gps-permission-section {
+            text-align: center;
+        }
+
+        .gps-permission-section h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .gps-info {
+            background: #f0f7ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .gps-info strong {
+            color: #2196F3;
+        }
+
+        .gps-info ul {
+            margin: 10px 0 0 20px;
+        }
+
+        .gps-info li {
+            margin: 5px 0;
+        }
+
         .speed-display {
             text-align: center;
             margin-bottom: 30px;
@@ -97,9 +130,34 @@
         }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #667eea;
+        }
+
+        .stats-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box-2 {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #ffeaa7;
+        }
+
+        .stat-box-2 .stat-label {
+            color: #856404;
+            font-size: 11px;
+        }
+
+        .stat-box-2 .stat-value {
+            font-size: 16px;
+            color: #856404;
         }
 
         .milestones-section {
@@ -129,6 +187,7 @@
         .milestone-box.achieved {
             background: #4CAF50;
             color: white;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
         }
 
         .milestone-name {
@@ -160,11 +219,21 @@
             width: 100%;
         }
 
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .btn-primary {
             background: #4CAF50;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             background: #45a049;
         }
 
@@ -172,7 +241,7 @@
             background: #f44336;
         }
 
-        .btn-danger:hover {
+        .btn-danger:hover:not(:disabled) {
             background: #da190b;
         }
 
@@ -180,8 +249,14 @@
             background: #2196F3;
         }
 
-        .btn-secondary:hover {
+        .btn-secondary:hover:not(:disabled) {
             background: #0b7dda;
+        }
+
+        .btn-full {
+            grid-column: 1 / -1;
+            padding: 15px;
+            font-size: 18px;
         }
 
         .hidden {
@@ -204,6 +279,7 @@
             padding: 20px;
             margin-bottom: 15px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
         }
 
         .run-header {
@@ -214,11 +290,13 @@
 
         .run-header h3 {
             margin-bottom: 5px;
+            color: #667eea;
         }
 
         .run-date {
             font-size: 12px;
             color: #999;
+            margin-bottom: 8px;
         }
 
         .run-stats {
@@ -229,15 +307,83 @@
         }
 
         .run-stat-item {
-            font-size: 14px;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
+            font-size: 13px;
+            padding: 8px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
         }
 
-        .run-stat-item strong {
+        .run-stat-label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .run-stat-value {
             color: #667eea;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 3px;
+        }
+
+        .run-accuracy {
+            background: #e3f2fd;
+            border-left: 3px solid #2196F3;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .run-accuracy strong {
+            color: #2196F3;
+        }
+
+        .run-milestones-detail {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .run-milestones-detail h4 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .milestone-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .milestone-detail {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .milestone-detail.achieved {
+            background: #e8f5e9;
+            border: 1px solid #4CAF50;
+        }
+
+        .milestone-detail-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .milestone-detail-time {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        .milestone-detail-notachieved {
+            color: #999;
         }
 
         .footer {
@@ -254,6 +400,51 @@
             margin-bottom: 10px;
         }
 
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #f44336;
+        }
+
+        .status-indicator.active {
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .gps-status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .gps-status.disabled {
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+        }
+
+        .gps-status.enabled {
+            background: #e8f5e9;
+            border: 1px solid #66bb6a;
+            color: #2e7d32;
+        }
+
+        .gps-status.active {
+            background: #e3f2fd;
+            border: 1px solid #42a5f5;
+            color: #1565c0;
+        }
+
         @media (max-width: 480px) {
             .header h1 {
                 font-size: 24px;
@@ -267,11 +458,23 @@
                 grid-template-columns: 1fr;
             }
 
+            .stats-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
             .milestones-grid {
                 grid-template-columns: 1fr;
             }
 
             .buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .run-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .milestone-detail-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -284,8 +487,43 @@
             <p>GPS měření zrychlení a času dosažení milníků</p>
         </div>
 
+        <!-- GPS Permission Section -->
+        <div id="gps-permission-section" class="section gps-permission-section">
+            <h2>📍 Povolení GPS</h2>
+            
+            <div id="gps-status" class="gps-status disabled">
+                <span class="status-indicator"></span>
+                <strong>GPS:</strong> Nevyžadován
+            </div>
+
+            <div class="gps-info">
+                <strong>Jak to funguje?</strong>
+                <ul>
+                    <li>Aplikace měří vaši polohu pomocí GPS</li>
+                    <li>Zaznamenává časy dosažení milníků (0-50, 0-100, 0-200 km/h)</li>
+                    <li>Měří zrychlení a vzdálenost</li>
+                    <li>Všechna data zůstávají na vašem telefonu</li>
+                    <li>Nic se neposílá na internet</li>
+                </ul>
+            </div>
+
+            <button class="btn-primary btn-full" onclick="requestGPSPermission()">
+                ✓ Povolte přístup k GPS
+            </button>
+
+            <p style="text-align: center; margin-top: 15px; color: #999; font-size: 13px;">
+                ⚠️ Bez GPS povolení aplikace nemůže fungovat<br>
+                Vyberte "Povolte" nebo "Povolte jen jednou"
+            </p>
+        </div>
+
         <!-- Aktivní měření -->
         <div id="active-section" class="section hidden">
+            <div id="gps-status-active" class="gps-status active">
+                <span class="status-indicator active"></span>
+                <strong>GPS:</strong> Aktivní (měření probíhá)
+            </div>
+
             <div class="speed-display">
                 <div class="speed-number" id="speed-display">0.0</div>
                 <div class="speed-unit">km/h</div>
@@ -306,34 +544,39 @@
                 </div>
             </div>
 
+            <div class="stats-grid-2">
+                <div class="stat-box-2">
+                    <div class="stat-label">Přesnost GPS</div>
+                    <div class="stat-value" id="accuracy-display">-</div>
+                </div>
+                <div class="stat-box-2">
+                    <div class="stat-label">Počet měření</div>
+                    <div class="stat-value" id="measurement-count">0</div>
+                </div>
+            </div>
+
             <div class="milestones-section">
                 <h3>Dosažené milníky:</h3>
                 <div class="milestones-grid" id="milestones-display"></div>
             </div>
 
-            <button class="btn-danger" onclick="stopMeasurement()" style="width: 100%;">
+            <button class="btn-danger btn-full" onclick="stopMeasurement()">
                 Zastavit měření
             </button>
         </div>
 
         <!-- Úvodní akce -->
-        <div id="start-section" class="section">
-            <div class="buttons">
-                <button class="btn-primary" onclick="startMeasurement()" style="grid-column: 1 / -1; padding: 15px; font-size: 18px;">
-                    Spustit měření
-                </button>
-            </div>
-            <p style="text-align: center; margin-top: 15px; color: #999; font-size: 13px;">
-                ⚠️ Aplikace bude žádat přístup k GPS<br>
-                Vždy povolte pro správné fungování
-            </p>
+        <div id="start-section" class="section hidden">
+            <button class="btn-primary btn-full" onclick="startMeasurement()" style="padding: 15px; font-size: 18px;">
+                ▶️ Spustit měření
+            </button>
         </div>
 
         <!-- Historie -->
         <div id="history-section" class="history-section hidden">
             <h2>📊 Historie měření</h2>
             <div id="runs-container"></div>
-            <button class="btn-danger" onclick="clearAllData()" style="width: 100%;">
+            <button class="btn-danger" onclick="clearAllData()" style="width: 100%; margin-top: 10px;">
                 Vymazat vše
             </button>
         </div>
@@ -349,8 +592,10 @@
         // Globální stav
         let state = {
             isRunning: false,
+            gpsEnabled: false,
             currentSpeed: 0,
             currentAcceleration: 0,
+            currentAccuracy: null,
             elapsedTime: 0,
             distance: 0,
             measurements: [],
@@ -370,6 +615,35 @@
             geoWatchId: null,
             timerInterval: null,
         };
+
+        // Žádost o GPS povolení
+        function requestGPSPermission() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        state.gpsEnabled = true;
+                        updateGPSStatus();
+                        document.getElementById('gps-permission-section').classList.add('hidden');
+                        document.getElementById('start-section').classList.remove('hidden');
+                    },
+                    function(error) {
+                        alert('Chyba GPS: ' + error.message + '\n\nZkuste znovu nebo zkontrolujte nastavení.');
+                    }
+                );
+            } else {
+                alert('Váš prohlížeč nepodporuje GPS!');
+            }
+        }
+
+        // Aktualizace GPS statusu
+        function updateGPSStatus() {
+            const statusEl = document.getElementById('gps-status');
+            if (state.gpsEnabled) {
+                statusEl.classList.remove('disabled');
+                statusEl.classList.add('enabled');
+                statusEl.innerHTML = '<span class="status-indicator" style="background: #4CAF50;"></span><strong>GPS:</strong> Povoleno ✓';
+            }
+        }
 
         // Výpočet vzdálenosti mezi dvěma GPS body (Haversine)
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -425,6 +699,7 @@
                 state.startCoordinates = { latitude, longitude };
                 state.previousSpeed = speed || 0;
                 state.previousSpeedTime = currentTime;
+                state.currentAccuracy = accuracy;
                 return;
             }
 
@@ -451,6 +726,7 @@
 
             state.currentSpeed = speedKmh;
             state.currentAcceleration = acceleration;
+            state.currentAccuracy = accuracy;
             state.elapsedTime = currentTime;
 
             // Zaznamenání měření
@@ -481,6 +757,11 @@
 
         // Spuštění měření
         function startMeasurement() {
+            if (!state.gpsEnabled) {
+                alert('Nejdřív povolte GPS!');
+                return;
+            }
+
             state.isRunning = true;
             state.measurements = [];
             state.milestones = {
@@ -495,6 +776,7 @@
             state.distance = 0;
             state.currentSpeed = 0;
             state.currentAcceleration = 0;
+            state.currentAccuracy = null;
             state.startTime = Date.now();
             state.startCoordinates = null;
             state.previousSpeed = 0;
@@ -541,11 +823,15 @@
 
             // Uložení měření
             if (state.measurements.length > 0) {
+                const avgAccuracy = (state.measurements.reduce((sum, m) => sum + parseFloat(m.accuracy), 0) / state.measurements.length).toFixed(1);
                 const runData = {
                     timestamp: new Date().toLocaleString('cs-CZ'),
                     duration: state.elapsedTime.toFixed(2),
                     maxSpeed: Math.max(...state.measurements.map((m) => parseFloat(m.speed))).toFixed(1),
                     maxAcceleration: Math.max(...state.measurements.map((m) => parseFloat(m.acceleration))).toFixed(2),
+                    minAccuracy: Math.min(...state.measurements.map((m) => parseFloat(m.accuracy))).toFixed(1),
+                    avgAccuracy: avgAccuracy,
+                    maxAccuracy: Math.max(...state.measurements.map((m) => parseFloat(m.accuracy))).toFixed(1),
                     distance: state.distance.toFixed(1),
                     milestones: { ...state.milestones },
                     measurements: [...state.measurements],
@@ -571,6 +857,8 @@
             document.getElementById('time-display').textContent = state.elapsedTime.toFixed(2) + 's';
             document.getElementById('accel-display').textContent = state.currentAcceleration.toFixed(2) + ' m/s²';
             document.getElementById('distance-display').textContent = (state.distance / 1000).toFixed(3) + ' km';
+            document.getElementById('accuracy-display').textContent = state.currentAccuracy ? state.currentAccuracy.toFixed(1) + ' m' : '-';
+            document.getElementById('measurement-count').textContent = state.measurements.length;
         }
 
         // Aktualizace milníků
@@ -602,35 +890,49 @@
                         <h3>Měření #${index + 1}</h3>
                         <div class="run-date">${run.timestamp}</div>
                     </div>
+
+                    <div class="run-accuracy">
+                        <strong>📊 Přesnost GPS:</strong><br>
+                        Nejlepší: <strong>${run.minAccuracy} m</strong> | 
+                        Průměr: <strong>${run.avgAccuracy} m</strong> | 
+                        Nejhorší: <strong>${run.maxAccuracy} m</strong>
+                    </div>
+
                     <div class="run-stats">
                         <div class="run-stat-item">
-                            <span>Doba měření:</span>
-                            <strong>${run.duration}s</strong>
+                            <div class="run-stat-label">⏱️ Doba měření</div>
+                            <div class="run-stat-value">${run.duration}s</div>
                         </div>
                         <div class="run-stat-item">
-                            <span>Max. rychlost:</span>
-                            <strong>${run.maxSpeed} km/h</strong>
+                            <div class="run-stat-label">💨 Max. rychlost</div>
+                            <div class="run-stat-value">${run.maxSpeed} km/h</div>
                         </div>
                         <div class="run-stat-item">
-                            <span>Max. zrychlení:</span>
-                            <strong>${run.maxAcceleration} m/s²</strong>
+                            <div class="run-stat-label">⚡ Max. zrychlení</div>
+                            <div class="run-stat-value">${run.maxAcceleration} m/s²</div>
                         </div>
                         <div class="run-stat-item">
-                            <span>Vzdálenost:</span>
-                            <strong>${(run.distance / 1000).toFixed(3)} km</strong>
+                            <div class="run-stat-label">📏 Vzdálenost</div>
+                            <div class="run-stat-value">${(run.distance / 1000).toFixed(3)} km</div>
                         </div>
                     </div>
-                    <div class="milestones-grid">
-                        ${Object.entries(run.milestones)
-                            .map(([key, time]) => `
-                            <div class="milestone-box${time !== null ? ' achieved' : ''}">
-                                <div class="milestone-name">${key}</div>
-                                <div class="milestone-time" style="font-size: 14px;">${time !== null ? time.toFixed(2) + 's' : '---'}</div>
-                            </div>
-                        `).join('')}
+
+                    <div class="run-milestones-detail">
+                        <h4>🎯 Dosažené milníky:</h4>
+                        <div class="milestone-detail-grid">
+                            ${Object.entries(run.milestones)
+                                .map(([key, time]) => `
+                                <div class="milestone-detail${time !== null ? ' achieved' : ''}">
+                                    <div class="milestone-detail-name">${key}</div>
+                                    <div class="milestone-detail-time">${time !== null ? time.toFixed(2) + 's' : ''}</div>
+                                    <div class="milestone-detail-notachieved">${time === null ? '---' : ''}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
-                    <button class="btn-secondary" onclick="exportData(${index})" style="width: 100%; margin-top: 10px;">
-                        Stáhnout CSV
+
+                    <button class="btn-secondary" onclick="exportData(${index})" style="width: 100%; margin-top: 15px;">
+                        📥 Stáhnout CSV
                     </button>
                 `;
                 container.appendChild(card);
@@ -642,12 +944,12 @@
             const run = state.savedRuns[runIndex];
             if (!run) return;
 
-            let csv = 'Čas (s),Rychlost (km/h),Zrychlení (m/s²),Vzdálenost (m),Přesnost (m)\n';
+            let csv = 'Čas (s),Rychlost (km/h),Zrychlení (m/s²),Vzdálenost (m),Přesnost GPS (m)\n';
             run.measurements.forEach((m) => {
                 csv += `${m.time},${m.speed},${m.acceleration},${m.distance},${m.accuracy}\n`;
             });
 
-            const blob = new Blob([csv], { type: 'text/csv' });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
