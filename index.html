@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#667eea">
+    <title>🏁 Měřič výkonu vozidla</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* GPS Permission Section */
+        .gps-permission-section {
+            text-align: center;
+        }
+
+        .gps-permission-section h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .gps-info {
+            background: #f0f7ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .gps-info strong {
+            color: #2196F3;
+        }
+
+        .gps-info ul {
+            margin: 10px 0 0 20px;
+        }
+
+        .gps-info li {
+            margin: 5px 0;
+        }
+
+        /* Waiting for motion */
+        .waiting-section {
+            text-align: center;
+        }
+
+        .waiting-animation {
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #fff3cd 0%, #fff9e6 100%);
+            border-radius: 12px;
+            border: 2px solid #ffeaa7;
+        }
+
+        .waiting-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .waiting-car-icon {
+            font-size: 64px;
+            margin: 20px 0;
+            animation: carMove 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes carMove {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(20px); }
+        }
+
+        .waiting-subtitle {
+            font-size: 16px;
+            color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .current-speed-waiting {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 15px 0;
+        }
+
+        .speed-display {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            color: white;
+        }
+
+        .speed-number {
+            font-size: 72px;
+            font-weight: bold;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .speed-unit {
+            font-size: 24px;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #eee;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stats-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box-2 {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #ffeaa7;
+        }
+
+        .stat-box-2 .stat-label {
+            color: #856404;
+            font-size: 11px;
+        }
+
+        .stat-box-2 .stat-value {
+            font-size: 16px;
+            color: #856404;
+        }
+
+        .milestones-section {
+            margin-bottom: 20px;
+        }
+
+        .milestones-section h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .milestone-box {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            background: #f5f5f5;
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .milestone-box.achieved {
+            background: #4CAF50;
+            color: white;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        }
+
+        .milestone-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .milestone-time {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #45a049;
+        }
+
+        .btn-danger {
+            background: #f44336;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #da190b;
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #0b7dda;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: #e68900;
+        }
+
+        .btn-full {
+            grid-column: 1 / -1;
+            padding: 15px;
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-section h2 {
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .run-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .run-header {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .run-header h3 {
+            margin-bottom: 5px;
+            color: #667eea;
+        }
+
+        .run-date {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .run-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .run-stat-item {
+            font-size: 13px;
+            padding: 8px;
+            background: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+
+        .run-stat-label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .run-stat-value {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 3px;
+        }
+
+        .run-accuracy {
+            background: #e3f2fd;
+            border-left: 3px solid #2196F3;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .run-accuracy strong {
+            color: #2196F3;
+        }
+
+        .run-milestones-detail {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .run-milestones-detail h4 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .milestone-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .milestone-detail {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .milestone-detail.achieved {
+            background: #e8f5e9;
+            border: 1px solid #4CAF50;
+        }
+
+        .milestone-detail-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .milestone-detail-time {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-top: 3px;
+        }
+
+        .milestone-detail-notachieved {
+            color: #999;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 13px;
+            color: white;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #f44336;
+        }
+
+        .status-indicator.active {
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .gps-status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .gps-status.disabled {
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            color: #c62828;
+        }
+
+        .gps-status.enabled {
+            background: #e8f5e9;
+            border: 1px solid #66bb6a;
+            color: #2e7d32;
+        }
+
+        .gps-status.active {
+            background: #e3f2fd;
+            border: 1px solid #42a5f5;
+            color: #1565c0;
+        }
+
+        .gps-status.waiting {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            animation: pulse 1.5s infinite;
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .speed-number {
+                font-size: 48px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .milestones-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .run-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .milestone-detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .waiting-car-icon {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏁 Měřič výkonu vozidla</h1>
+            <p>GPS měření zrychlení a času dosažení milníků</p>
+        </div>
+
+        <!-- GPS Permission Section -->
+        <div id="gps-permission-section" class="section gps-permission-section">
+            <h2>📍 Povolení GPS</h2>
+            
+            <div id="gps-status" class="gps-status disabled">
+                <span class="status-indicator"></span>
+                <strong>GPS:</strong> Nevyžadován
+            </div>
+
+            <div class="gps-info">
+                <strong>Jak to funguje?</strong>
+                <ul>
+                    <li>Aplikace měří vaši polohu pomocí GPS</li>
+                    <li>Zaznamenává časy dosažení milníků (0-50, 0-100, 0-200 km/h)</li>
+                    <li>Měří zrychlení a vzdálenost</li>
+                    <li>Všechna data zůstávají na vašem telefonu</li>
+                    <li>Nic se neposílá na internet</li>
+                </ul>
+            </div>
+
+            <button class="btn-primary btn-full" onclick="requestGPSPermission()">
+                ✓ Povolte přístup k GPS
+            </button>
+
+            <p style="text-align: center; margin-top: 15px; color: #999; font-size: 13px;">
+                ⚠️ Bez GPS povolení aplikace nemůže fungovat<br>
+                Vyberte "Povolte" nebo "Povolte jen jednou"
+            </p>
+        </div>
+
+        <!-- Čekání na pohyb -->
+        <div id="waiting-section" class="section waiting-section hidden">
+            <div class="gps-status waiting">
+                <span class="status-indicator active"></span>
+                <strong>GPS:</strong> Čekám na pohyb vozidla...
+            </div>
+
+            <div class="waiting-animation">
+                <div class="waiting-title">⏳ Čekání na pohyb</div>
+                <div class="waiting-car-icon">🚗</div>
+                <div class="waiting-subtitle">Připravte se a začněte s měřením</div>
+                <div class="current-speed-waiting" id="waiting-speed-display">0.0 km/h</div>
+                <p style="color: #f39c12; font-size: 13px; margin-top: 15px;">
+                    Jakmile začnete s vozidlem, měření se automaticky spustí
+                </p>
+            </div>
+
+            <button class="btn-danger btn-full" onclick="cancelWaiting()">
+                Zrušit
+            </button>
+        </div>
+
+        <!-- Aktivní měření -->
+        <div id="active-section" class="section hidden">
+            <div id="gps-status-active" class="gps-status active">
+                <span class="status-indicator active"></span>
+                <strong>GPS:</strong> Aktivní (měření probíhá)
+            </div>
+
+            <div class="speed-display">
+                <div class="speed-number" id="speed-display">0.0</div>
+                <div class="speed-unit">km/h</div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-label">Čas</div>
+                    <div class="stat-value" id="time-display">0.00s</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Zrychlení</div>
+                    <div class="stat-value" id="accel-display">0.00 m/s²</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-label">Vzdálenost</div>
+                    <div class="stat-value" id="distance-display">0.000 km</div>
+                </div>
+            </div>
+
+            <div class="stats-grid-2">
+                <div class="stat-box-2">
+                    <div class="stat-label">Přesnost GPS</div>
+                    <div class="stat-value" id="accuracy-display">-</div>
+                </div>
+                <div class="stat-box-2">
+                    <div class="stat-label">Počet měření</div>
+                    <div class="stat-value" id="measurement-count">0</div>
+                </div>
+            </div>
+
+            <div class="milestones-section">
+                <h3>Dosažené milníky:</h3>
+                <div class="milestones-grid" id="milestones-display"></div>
+            </div>
+
+            <button class="btn-danger btn-full" onclick="stopMeasurement()">
+                Zastavit měření
+            </button>
+        </div>
+
+        <!-- Úvodní akce -->
+        <div id="start-section" class="section hidden">
+            <button class="btn-primary btn-full" onclick="startWaitingForMotion()" style="padding: 15px; font-size: 18px;">
+                ▶️ Připravit na měření
+            </button>
+        </div>
+
+        <!-- Historie -->
+        <div id="history-section" class="history-section hidden">
+            <h2>📊 Historie měření</h2>
+            <div id="runs-container"></div>
+            <button class="btn-danger" onclick="clearAllData()" style="width: 100%; margin-top: 10px;">
+                Vymazat vše
+            </button>
+        </div>
+
+        <div class="footer">
+            <p><strong>⚠️ Důležité upozornění:</strong></p>
+            <p>NIKDY neměřte při řízení - měří se pouze na uzavřené trati!</p>
+            <p>Přesnost GPS: ~5-10 metrů, interval: ~1-2 sekundy</p>
+        </div>
+    </div>
+
+    <script>
+        // Globální stav
+        let state = {
+            isRunning: false,
+            isWaitingForMotion: false,
+            gpsEnabled: false,
+            currentSpeed: 0,
+            currentAcceleration: 0,
+            currentAccuracy: null,
+            elapsedTime: 0,
+            distance: 0,
+            measurements: [],
+            milestones: {
+                '0-50': null,
+                '0-100': null,
+                '0-200': null,
+                '100-200': null,
+                '400m': null,
+                '1km': null,
+            },
+            savedRuns: [],
+            startTime: null,
+            startCoordinates: null,
+            previousSpeed: 0,
+            previousSpeedTime: 0,
+            geoWatchId: null,
+            timerInterval: null,
+            motionThreshold: 2, // km/h - prah pro detekci pohybu
+        };
+
+        // Žádost o GPS povolení
+        function requestGPSPermission() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        state.gpsEnabled = true;
+                        updateGPSStatus();
+                        document.getElementById('gps-permission-section').classList.add('hidden');
+                        document.getElementById('start-section').classList.remove('hidden');
+                    },
+                    function(error) {
+                        alert('Chyba GPS: ' + error.message + '\n\nZkuste znovu nebo zkontrolujte nastavení.');
+                    }
+                );
+            } else {
+                alert('Váš prohlížeč nepodporuje GPS!');
+            }
+        }
+
+        // Aktualizace GPS statusu
+        function updateGPSStatus() {
+            const statusEl = document.getElementById('gps-status');
+            if (state.gpsEnabled) {
+                statusEl.classList.remove('disabled');
+                statusEl.classList.add('enabled');
+                statusEl.innerHTML = '<span class="status-indicator" style="background: #4CAF50;"></span><strong>GPS:</strong> Povoleno ✓';
+            }
+        }
+
+        // Výpočet vzdálenosti mezi dvěma GPS body (Haversine)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371000; // Poloměr Země v metrech
+            const dLat = ((lat2 - lat1) * Math.PI) / 180;
+            const dLon = ((lon2 - lon1) * Math.PI) / 180;
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos((lat1 * Math.PI) / 180) *
+                    Math.cos((lat2 * Math.PI) / 180) *
+                    Math.sin(dLon / 2) *
+                    Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        // Kontrola dosažení milníků
+        function checkMilestones(speed, distance, time) {
+            const speedKmh = speed * 3.6;
+
+            if (!state.milestones['0-50'] && speedKmh >= 50) {
+                state.milestones['0-50'] = time;
+            }
+            if (!state.milestones['0-100'] && speedKmh >= 100) {
+                state.milestones['0-100'] = time;
+            }
+            if (!state.milestones['0-200'] && speedKmh >= 200) {
+                state.milestones['0-200'] = time;
+            }
+            if (!state.milestones['100-200'] && speedKmh >= 200 && state.previousSpeed * 3.6 >= 100) {
+                if (!state.milestones['100-200']) {
+                    state.milestones['100-200'] = time;
+                }
+            }
+            if (!state.milestones['400m'] && distance >= 400) {
+                state.milestones['400m'] = time;
+            }
+            if (!state.milestones['1km'] && distance >= 1000) {
+                state.milestones['1km'] = time;
+            }
+
+            updateMilestonesDisplay();
+        }
+
+        // Zpracování GPS dat - Čekání na pohyb
+        function handleGPSWaiting(position) {
+            const { speed } = position.coords;
+            const speedKmh = (speed || 0) * 3.6;
+
+            // Aktualizace rychlosti během čekání
+            document.getElementById('waiting-speed-display').textContent = speedKmh.toFixed(1) + ' km/h';
+
+            // Pokud překročíme práh, spustíme měření
+            if (speedKmh >= state.motionThreshold) {
+                // Přestáváme čekat na pohyb
+                state.isWaitingForMotion = false;
+                if (state.geoWatchId) {
+                    navigator.geolocation.clearWatch(state.geoWatchId);
+                }
+
+                // Spustíme vlastní měření
+                state.isRunning = true;
+                state.measurements = [];
+                state.milestones = {
+                    '0-50': null,
+                    '0-100': null,
+                    '0-200': null,
+                    '100-200': null,
+                    '400m': null,
+                    '1km': null,
+                };
+                state.elapsedTime = 0;
+                state.distance = 0;
+                state.currentSpeed = 0;
+                state.currentAcceleration = 0;
+                state.currentAccuracy = null;
+                state.startTime = Date.now();
+                state.startCoordinates = null;
+                state.previousSpeed = 0;
+                state.previousSpeedTime = 0;
+
+                // Změna UI
+                document.getElementById('waiting-section').classList.add('hidden');
+                document.getElementById('active-section').classList.remove('hidden');
+
+                // Inicializace milníků
+                updateMilestonesDisplay();
+
+                // Nové GPS watch pro měření
+                const options = {
+                    enableHighAccuracy: true,
+                    maximumAge: 0,
+                    timeout: 5000,
+                };
+
+                state.geoWatchId = navigator.geolocation.watchPosition(
+                    handleGPSSuccess,
+                    handleGPSError,
+                    options
+                );
+
+                // Timer
+                state.timerInterval = setInterval(() => {
+                    state.elapsedTime += 0.01;
+                    updateDisplay();
+                }, 10);
+            }
+        }
+
+        // Zpracování GPS dat - Měření
+        function handleGPSSuccess(position) {
+            const { latitude, longitude, accuracy, speed } = position.coords;
+            const timestamp = Date.now();
+            const currentTime = (timestamp - state.startTime) / 1000;
+
+            // Inicializace
+            if (!state.startCoordinates) {
+                state.startCoordinates = { latitude, longitude };
+                state.previousSpeed = speed || 0;
+                state.previousSpeedTime = currentTime;
+                state.currentAccuracy = accuracy;
+                return;
+            }
+
+            // Vzdálenost od startu
+            const dist = calculateDistance(
+                state.startCoordinates.latitude,
+                state.startCoordinates.longitude,
+                latitude,
+                longitude
+            );
+            state.distance = dist;
+
+            // Zrychlení
+            let acceleration = 0;
+            if (currentTime > state.previousSpeedTime) {
+                const speedDiff = (speed || 0) - state.previousSpeed;
+                const timeDiff = currentTime - state.previousSpeedTime;
+                acceleration = speedDiff / timeDiff;
+            }
+
+            // Aktualizace stavu
+            const speedMps = speed || 0;
+            const speedKmh = speedMps * 3.6;
+
+            state.currentSpeed = speedKmh;
+            state.currentAcceleration = acceleration;
+            state.currentAccuracy = accuracy;
+            state.elapsedTime = currentTime;
+
+            // Zaznamenání měření
+            state.measurements.push({
+                time: currentTime.toFixed(2),
+                speed: speedKmh.toFixed(1),
+                acceleration: acceleration.toFixed(2),
+                distance: dist.toFixed(1),
+                latitude: latitude.toFixed(6),
+                longitude: longitude.toFixed(6),
+                accuracy: accuracy ? accuracy.toFixed(1) : 'N/A',
+            });
+
+            // Kontrola milníků
+            checkMilestones(speedMps, dist, currentTime);
+
+            // Aktualizace UI
+            updateDisplay();
+
+            state.previousSpeed = speedMps;
+            state.previousSpeedTime = currentTime;
+        }
+
+        function handleGPSError(error) {
+            console.error('GPS Error:', error);
+            alert('Chyba GPS: ' + error.message);
+        }
+
+        // Příprava na měření - čekání na pohyb
+        function startWaitingForMotion() {
+            if (!state.gpsEnabled) {
+                alert('Nejdřív povolte GPS!');
+                return;
+            }
+
+            state.isWaitingForMotion = true;
+            document.getElementById('start-section').classList.add('hidden');
+            document.getElementById('waiting-section').classList.remove('hidden');
+
+            // Žádost o GPS - čekání na pohyb
+            const options = {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 5000,
+            };
+
+            state.geoWatchId = navigator.geolocation.watchPosition(
+                handleGPSWaiting,
+                handleGPSError,
+                options
+            );
+        }
+
+        // Zrušení čekání
+        function cancelWaiting() {
+            state.isWaitingForMotion = false;
+            if (state.geoWatchId) {
+                navigator.geolocation.clearWatch(state.geoWatchId);
+            }
+            document.getElementById('waiting-section').classList.add('hidden');
+            document.getElementById('start-section').classList.remove('hidden');
+        }
+
+        // Zastavení měření
+        function stopMeasurement() {
+            state.isRunning = false;
+
+            if (state.geoWatchId) {
+                navigator.geolocation.clearWatch(state.geoWatchId);
+            }
+
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+            }
+
+            // Uložení měření
+            if (state.measurements.length > 0) {
+                const avgAccuracy = (state.measurements.reduce((sum, m) => sum + parseFloat(m.accuracy), 0) / state.measurements.length).toFixed(1);
+                const runData = {
+                    timestamp: new Date().toLocaleString('cs-CZ'),
+                    duration: state.elapsedTime.toFixed(2),
+                    maxSpeed: Math.max(...state.measurements.map((m) => parseFloat(m.speed))).toFixed(1),
+                    maxAcceleration: Math.max(...state.measurements.map((m) => parseFloat(m.acceleration))).toFixed(2),
+                    minAccuracy: Math.min(...state.measurements.map((m) => parseFloat(m.accuracy))).toFixed(1),
+                    avgAccuracy: avgAccuracy,
+                    maxAccuracy: Math.max(...state.measurements.map((m) => parseFloat(m.accuracy))).toFixed(1),
+                    distance: state.distance.toFixed(1),
+                    milestones: { ...state.milestones },
+                    measurements: [...state.measurements],
+                };
+
+                state.savedRuns.push(runData);
+                localStorage.setItem('speedTrackerRuns', JSON.stringify(state.savedRuns));
+            }
+
+            // Změna UI
+            document.getElementById('active-section').classList.add('hidden');
+            document.getElementById('start-section').classList.remove('hidden');
+
+            if (state.savedRuns.length > 0) {
+                document.getElementById('history-section').classList.remove('hidden');
+                updateHistoryDisplay();
+            }
+        }
+
+        // Aktualizace zobrazení
+        function updateDisplay() {
+            document.getElementById('speed-display').textContent = state.currentSpeed.toFixed(1);
+            document.getElementById('time-display').textContent = state.elapsedTime.toFixed(2) + 's';
+            document.getElementById('accel-display').textContent = state.currentAcceleration.toFixed(2) + ' m/s²';
+            document.getElementById('distance-display').textContent = (state.distance / 1000).toFixed(3) + ' km';
+            document.getElementById('accuracy-display').textContent = state.currentAccuracy ? state.currentAccuracy.toFixed(1) + ' m' : '-';
+            document.getElementById('measurement-count').textContent = state.measurements.length;
+        }
+
+        // Aktualizace milníků
+        function updateMilestonesDisplay() {
+            const container = document.getElementById('milestones-display');
+            container.innerHTML = '';
+
+            Object.entries(state.milestones).forEach(([key, time]) => {
+                const box = document.createElement('div');
+                box.className = 'milestone-box' + (time !== null ? ' achieved' : '');
+                box.innerHTML = `
+                    <div class="milestone-name">${key}</div>
+                    <div class="milestone-time">${time !== null ? time.toFixed(2) + 's' : '---'}</div>
+                `;
+                container.appendChild(box);
+            });
+        }
+
+        // Aktualizace historie
+        function updateHistoryDisplay() {
+            const container = document.getElementById('runs-container');
+            container.innerHTML = '';
+
+            state.savedRuns.forEach((run, index) => {
+                const card = document.createElement('div');
+                card.className = 'run-card';
+                card.innerHTML = `
+                    <div class="run-header">
+                        <h3>Měření #${index + 1}</h3>
+                        <div class="run-date">${run.timestamp}</div>
+                    </div>
+
+                    <div class="run-accuracy">
+                        <strong>📊 Přesnost GPS:</strong><br>
+                        Nejlepší: <strong>${run.minAccuracy} m</strong> | 
+                        Průměr: <strong>${run.avgAccuracy} m</strong> | 
+                        Nejhorší: <strong>${run.maxAccuracy} m</strong>
+                    </div>
+
+                    <div class="run-stats">
+                        <div class="run-stat-item">
+                            <div class="run-stat-label">⏱️ Doba měření</div>
+                            <div class="run-stat-value">${run.duration}s</div>
+                        </div>
+                        <div class="run-stat-item">
+                            <div class="run-stat-label">💨 Max. rychlost</div>
+                            <div class="run-stat-value">${run.maxSpeed} km/h</div>
+                        </div>
+                        <div class="run-stat-item">
+                            <div class="run-stat-label">⚡ Max. zrychlení</div>
+                            <div class="run-stat-value">${run.maxAcceleration} m/s²</div>
+                        </div>
+                        <div class="run-stat-item">
+                            <div class="run-stat-label">📏 Vzdálenost</div>
+                            <div class="run-stat-value">${(run.distance / 1000).toFixed(3)} km</div>
+                        </div>
+                    </div>
+
+                    <div class="run-milestones-detail">
+                        <h4>🎯 Dosažené milníky:</h4>
+                        <div class="milestone-detail-grid">
+                            ${Object.entries(run.milestones)
+                                .map(([key, time]) => `
+                                <div class="milestone-detail${time !== null ? ' achieved' : ''}">
+                                    <div class="milestone-detail-name">${key}</div>
+                                    <div class="milestone-detail-time">${time !== null ? time.toFixed(2) + 's' : ''}</div>
+                                    <div class="milestone-detail-notachieved">${time === null ? '---' : ''}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <button class="btn-secondary" onclick="exportData(${index})" style="width: 100%; margin-top: 15px;">
+                        📥 Stáhnout CSV
+                    </button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Export dat
+        function exportData(runIndex) {
+            const run = state.savedRuns[runIndex];
+            if (!run) return;
+
+            let csv = 'Čas (s),Rychlost (km/h),Zrychlení (m/s²),Vzdálenost (m),Přesnost GPS (m)\n';
+            run.measurements.forEach((m) => {
+                csv += `${m.time},${m.speed},${m.acceleration},${m.distance},${m.accuracy}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `speed-test-${runIndex}-${Date.now()}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Vymazání dat
+        function clearAllData() {
+            if (confirm('Opravdu chcete vymazat všechna uložená měření?')) {
+                state.savedRuns = [];
+                localStorage.setItem('speedTrackerRuns', JSON.stringify([]));
+                document.getElementById('history-section').classList.add('hidden');
+            }
+        }
+
+        // Načtení dat z úložiště
+        function loadData() {
+            const saved = localStorage.getItem('speedTrackerRuns');
+            if (saved) {
+                state.savedRuns = JSON.parse(saved);
+                if (state.savedRuns.length > 0) {
+                    document.getElementById('history-section').classList.remove('hidden');
+                    updateHistoryDisplay();
+                }
+            }
+        }
+
+        // Inicializace
+        loadData();
+    </script>
+</body>
+</html>
